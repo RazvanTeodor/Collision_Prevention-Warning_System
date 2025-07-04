@@ -1,24 +1,55 @@
-# In-progress
-🚗 Collision Prevention Warning System
+🛑 Collision Prevention Warning System (V2V Arduino Project)
+This project is an embedded system designed to prevent vehicle collisions using Vehicle-to-Vehicle (V2V) communication and real-time alerts. Developed as a bachelor’s thesis at UNSTPB – ETTI, it detects obstacles in front of a vehicle and automatically transmits alerts to following vehicles via Bluetooth Low Energy (BLE), with no need for external infrastructure.
 
-Description:
-This project implements a vehicle collision prevention system that detects obstacles in real-time and automatically initiates warnings for both the detecting vehicle (V1) and a nearby vehicle (V2) using Bluetooth technology.
+🔧 Technologies Used
+Arduino UNO R3 – control unit for each vehicle
 
-✨ Key Features
-📏 Distance Detection and Classification
-An ultrasonic sensor continuously measures the distance to obstacles, categorizing them into three zones:
+Ultrasonic Sensor HC-SR04 – obstacle distance measurement
 
-🟢 Safe Zone
-🟡 Warning Zone
-🔴 Danger Zone
-⚠️ Warning Signals
+Bluetooth Module HM-10 – BLE communication between vehicles
 
-In the Warning Zone: V1 displays a message on the screen to alert the driver.
-In the Danger Zone: The system activates both a visual alert and a buzzer to signal high risk.
+Gyroscope MPU6050 – orientation detection and alert filtering
 
-📲 Alert Transmission to Nearby Vehicle
-If there is a high risk of collision, V1 sends alerts via Bluetooth to V2, providing it with similar visual and audible warnings.
+TFT Display ST7789V – visual alert display
 
-🛠️ Technologies Used
-Hardware: Arduino Uno, Bluetooth modules, ultrasonic sensors, buzzer, displays.
-Software: Developed in C/C++ on the Arduino IDE.
+Passive Buzzer – audio alert for critical danger zone
+
+C++ & Arduino IDE – logic implementation and programming
+
+Proteus 8 Professional – early-stage simulation
+
+🧠 System Logic
+Continuous measurement of distance to obstacles;
+
+Relative speed calculation to assess risk levels;
+
+Alert generation based on danger zone (Safe / Warning / Critical);
+
+BLE message transmission, including distance and orientation data;
+
+Smart alert filtering using yaw and local distance.
+
+⚠️ Risk Zones
+Zone 1 – Safe: no alert;
+
+Zone 2 – Warning: visual display + BLE alert sent;
+
+Zone 3 – Critical: display + buzzer + BLE alert sent.
+
+📚 Tested Scenarios
+V1 in front, V2 behind – functional alert chain
+V1 detects obstacle and sends alert to V2. Both vehicles respond properly (display and slowdown/stop).
+
+V2 in front, V1 behind – role reversal
+Any vehicle can become the sender if it detects a threat. System supports dynamic role switching.
+
+Vehicles on opposite directions
+Alert is not implemented by the vehicle on a different heading – yaw filtering prevents false alerts.
+
+One vehicle stopped, one moving
+Only the moving vehicle evaluates and possibly sends an alert. Stationary vehicles ignore incoming alerts.
+
+Both vehicles moving slowly
+V1 enters the warning zone while V2 follows closely.
+However, relative speed is below threshold (e.g., traffic jam, parking).
+No alert is triggered. The system stays inactive in low-speed scenarios to avoid alert spam.
